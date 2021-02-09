@@ -57,7 +57,7 @@ function find_successors(state) {
   var terminateLoop = false; // variable to terminate outer for loop when blank is found
   for (var i = 0; i < 3 && !terminateLoop; i++) {
     for (var j = 0; j < 3; j++) {
-      if (state[i][j] == 0) {
+      if (state.grid[i][j] == 0) {
         i_idx = i;
         j_idx = j;
         terminateLoop = true;
@@ -67,12 +67,17 @@ function find_successors(state) {
   }
 
   // check if blank can go up
-  if (j_idx - 1 >= 0) {
+  if (i_idx - 1 >= 0) {
     // can go up
+
+    var newGrid = state.grid;
+    let aboveVal = newGrid[i_idx - 1][j_idx];
+    newGrid[i_idx - 1][j_idx] = 0;
+    newGrid[i_idx][j_idx] = aboveVal;
 
     // make new state
     let newState = { // TODO: what does x => x.slice(0) mean? how do we update the grid state?
-      grid : state.grid.map(x => x.slice(0))
+      grid: newGrid
     };
 
     // append to successors list
@@ -82,12 +87,18 @@ function find_successors(state) {
     });
   }
   // check if blank can go left
-  if (i_idx - 1 >= 0) {
+  if (j_idx - 1 >= 0) {
     // can go left
+
+    // copy grid
+    var newGrid = state.grid;
+    let leftVal = newGrid[i_idx][j_idx - 1];
+    newGrid[i_idx][j_idx - 1] = 0;
+    newGrid[i_idx][j_idx] = leftVal;
 
     // make new state
     let newState = {
-      grid: state.grid.map(x => x.slice(0))
+      grid: newGrid
     };
 
     // append to successors list
@@ -97,12 +108,18 @@ function find_successors(state) {
     });
   }
   // check if blank can go right
-  if (i_idx + 1 < 3) {
+  if (j_idx + 1 < 3) {
     // can go right
+
+    // copy grid
+    var newGrid = state.grid;
+    let rightVal = newGrid[i_idx][j_idx + 1];
+    newGrid[i_idx][j_idx + 1] = 0;
+    newGrid[i_idx][j_idx] = rightVal;
 
     // make new state
     let newState = {
-      grid: state.grid.map(x => x.slice(0))
+      grid: newGrid
     };
 
     // append to successors list
@@ -112,12 +129,18 @@ function find_successors(state) {
     });
   }
   // check if blank can go down
-  if (j_idx + 1 < 3) {
+  if (i_idx + 1 < 3) {
     // can go down
+
+    // copy grid
+    var newGrid = state.grid;
+    let belowVal = newGrid[i_idx + 1][j_idx];
+    newGrid[i_idx + 1][j_idx] = 0;
+    newGrid[i_idx][j_idx] = belowVal;
 
     // make new state
     let newState = {
-      grid : state.grid.map(x => x.slice(0))
+      grid : newGrid
     };
 
     // append to successors list
