@@ -12,6 +12,46 @@ function breadth_first_search(initial_state) {
 
   /***Your code for breadth-first search here***/
 
+  var current = {
+    parent: null,
+    currentState: initial_state,
+    successors: find_successors(initial_state) // contains actionID, next state
+  }
+
+  while (!is_goal_state(current.current)) {
+    var nextState = null
+    var i = 0
+    for (i = 0; i < current.successors.length; i++) {
+      nextState = current.successors[i].resultState
+      if (!closed.has(state_to_uniqueid(nextState))) {
+        break
+      }
+    }
+    // if nextState == null, no children and not a goal
+    if (action == null) {
+      // add this node to the closed set and go up
+      closed.add(current)
+      current = open.pop()
+      continue
+    }
+    // if i == current.successors.length, all children are in closed
+    if (i == current.successors.length) {
+      // all children are visited so add current node to closed and go up
+      closed.add(current)
+      current = open.pop()
+    } else {
+      // we still have some nodes to visit
+      // next state to go into
+      open.push(current)
+      current = {
+        parent: current.currentState,
+        current: nextState,
+        successors: find_successors(nextState)
+      }
+    }
+  }
+  // for now, assume goal has been found so add it to open
+  open.push(current)
   /*
     Hint: In order to generate the solution path, you will need to augment
       the states to store the predecessor/parent state they were generated from
@@ -35,13 +75,19 @@ function breadth_first_search(initial_state) {
   
   /***Your code to generate solution path here***/
   
-  return {
-    actions : /*array of action ids*/,
-    states : /*array of states*/
-  };
-  
-  //OR
+  var actionsToGoal = []
+  var statesToGoal = []
+  for (var i = 0; i < open.length; i++) {
+    let node = open[i]
+    actionsToGoal.add(node.action)
+    statesToGoal.add(node.resultState)
+  }
+  if (actionsToGoal.length == 0) {
+    return null
+  }
 
-  //No solution found
-  return null;
+  return {
+    actions : actionsToGoal,
+    states : statesToGoal
+  }
 }
