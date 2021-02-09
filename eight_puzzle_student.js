@@ -38,7 +38,9 @@ ID | Action
 function is_goal_state(state) {
   ++helper_eval_state_count; //Keep track of how many states are evaluated (DO NOT REMOVE!)
   
-  return /***Your code to check for goal state here!***/;
+  return state[0][0] == 1 && state[0][1] == 2 && state[0][2] == 3 &&
+     state[1][2] == 4 && state[2][2] == 5 && state[2][1] == 6 &&
+     state[2][0] == 7 && state[1][0] == 8 && state[1][1] == 0;
 }
 
 //Find the list of actions that can be performed from the given state and the new
