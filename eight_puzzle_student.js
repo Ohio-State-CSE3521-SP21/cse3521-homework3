@@ -38,9 +38,9 @@ ID | Action
 function is_goal_state(state) {
   ++helper_eval_state_count; //Keep track of how many states are evaluated (DO NOT REMOVE!)
   
-  return state[0][0] == 1 && state[0][1] == 2 && state[0][2] == 3 &&
-     state[1][2] == 4 && state[2][2] == 5 && state[2][1] == 6 &&
-     state[2][0] == 7 && state[1][0] == 8 && state[1][1] == 0;
+  return state.grid[0][0] == 1 && state.grid[0][1] == 2 && state.grid[0][2] == 3 &&
+     state.grid[1][2] == 4 && state.grid[2][2] == 5 && state.grid[2][1] == 6 &&
+     state.grid[2][0] == 7 && state.grid[1][0] == 8 && state.grid[1][1] == 0;
 }
 
 //Find the list of actions that can be performed from the given state and the new
@@ -49,9 +49,83 @@ function is_goal_state(state) {
 function find_successors(state) {
   ++helper_expand_state_count; //Keep track of how many states are expanded (DO NOT REMOVE!)
   
-  let successors=[];
+  let successors = [];
 
   /***Your code to generate successors here!***/
+  // find location of blank
+  var i_idx = 0, j_idx = 0;
+  var terminateLoop = false; // variable to terminate outer for loop when blank is found
+  for (var i = 0; i < 3 && !terminateLoop; i++) {
+    for (var j = 0; j < 3; j++) {
+      if (state[i][j] == 0) {
+        i_idx = i;
+        j_idx = j;
+        terminateLoop = true;
+        break;
+      }
+    }
+  }
+
+  // check if blank can go up
+  if (j_idx - 1 >= 0) {
+    // can go up
+
+    // make new state
+    let newState = { // TODO: what does x => x.slice(0) mean? how do we update the grid state?
+      grid : state.grid.map(x => x.slice(0))
+    };
+
+    // append to successors list
+    successors.push( {
+      actionID: 1,
+      resultState: newState
+    });
+  }
+  // check if blank can go left
+  if (i_idx - 1 >= 0) {
+    // can go left
+
+    // make new state
+    let newState = {
+      grid: state.grid.map(x => x.slice(0))
+    };
+
+    // append to successors list
+    successors.push( {
+      actionID: 3,
+      resultState: newState
+    });
+  }
+  // check if blank can go right
+  if (i_idx + 1 < 3) {
+    // can go right
+
+    // make new state
+    let newState = {
+      grid: state.grid.map(x => x.slice(0))
+    };
+
+    // append to successors list
+    successors.push( {
+      actionID: 4,
+      resultState: newState
+    });
+  }
+  // check if blank can go down
+  if (j_idx + 1 < 3) {
+    // can go down
+
+    // make new state
+    let newState = {
+      grid : state.grid.map(x => x.slice(0))
+    };
+
+    // append to successors list
+    successors.push( {
+      actionID: 2,
+      resultState: newState
+    });
+  }
 
   //Hint: Javascript objects are passed by reference, so don't modify "state" directy.
   //Make copies instead:
