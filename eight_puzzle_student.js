@@ -69,8 +69,9 @@ function find_successors(state) {
   // check if blank can go up
   if (i_idx - 1 >= 0) {
     // can go up
+    console.log("Can go up");
 
-    var newGrid = state.grid;
+    var newGrid = state.grid.map(x => x.slice(0));
     let aboveVal = newGrid[i_idx - 1][j_idx];
     newGrid[i_idx - 1][j_idx] = 0;
     newGrid[i_idx][j_idx] = aboveVal;
@@ -89,9 +90,10 @@ function find_successors(state) {
   // check if blank can go left
   if (j_idx - 1 >= 0) {
     // can go left
+    console.log("can go left");
 
     // copy grid
-    var newGrid = state.grid;
+    var newGrid = state.grid.map(x => x.slice(0));
     let leftVal = newGrid[i_idx][j_idx - 1];
     newGrid[i_idx][j_idx - 1] = 0;
     newGrid[i_idx][j_idx] = leftVal;
@@ -110,9 +112,10 @@ function find_successors(state) {
   // check if blank can go right
   if (j_idx + 1 < 3) {
     // can go right
+    console.log("can go right");
 
     // copy grid
-    var newGrid = state.grid;
+    var newGrid = state.grid.map(x => x.slice(0));
     let rightVal = newGrid[i_idx][j_idx + 1];
     newGrid[i_idx][j_idx + 1] = 0;
     newGrid[i_idx][j_idx] = rightVal;
@@ -131,9 +134,10 @@ function find_successors(state) {
   // check if blank can go down
   if (i_idx + 1 < 3) {
     // can go down
+    console.log("can go down");
 
     // copy grid
-    var newGrid = state.grid;
+    var newGrid = state.grid.map(x => x.slice(0));
     let belowVal = newGrid[i_idx + 1][j_idx];
     newGrid[i_idx + 1][j_idx] = 0;
     newGrid[i_idx][j_idx] = belowVal;
