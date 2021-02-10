@@ -12,46 +12,62 @@ function breadth_first_search(initial_state) {
 
   /***Your code for breadth-first search here***/
 
+  let openStates = []
+  let closedStates = new Set()
+  let actionHistory = []
   var current = {
     parent: null,
     currentState: initial_state,
     successors: find_successors(initial_state) // contains actionID, next state
   }
 
-  while (!is_goal_state(current.current)) {
-    var nextState = null
+  var successor = null
+  var nextState = null
+  while (!is_goal_state(current.currentState)) {
+    console.log(open.toString)
+    successor = null
+    nextState = null
     var i = 0
     for (i = 0; i < current.successors.length; i++) {
-      nextState = current.successors[i].resultState
-      if (!closed.has(state_to_uniqueid(nextState))) {
+      successor = current.successors[i]
+      nextState = successor.resultState
+      if (!closed.has(state_to_uniqueid(nextState)) && !open.includes(state_to_uniqueid(nextState))) {
         break
       }
     }
-    // if nextState == null, no children and not a goal
-    if (action == null) {
+    // if successor == null, no children and not a goal
+    if (successor == null) {
       // add this node to the closed set and go up
-      closed.add(current)
-      current = open.pop()
+      closed.add(state_to_uniqueid(current.currentState))
+      closedStates.add(current)
+      current = openStates.pop()
+      actionHistory.pop()
       continue
     }
     // if i == current.successors.length, all children are in closed
     if (i == current.successors.length) {
       // all children are visited so add current node to closed and go up
-      closed.add(current)
-      current = open.pop()
+      closed.add(state_to_uniqueid(current.currentState))
+      closedStates.add(current)
+      current = openStates.pop()
+      actionHistory.pop()
     } else {
       // we still have some nodes to visit
       // next state to go into
-      open.push(current)
+      open.push(state_to_uniqueid(current.currentState))
+      openStates.push(current)
+      actionHistory.push(successor.actionID)
       current = {
         parent: current.currentState,
-        current: nextState,
+        currentState: nextState,
         successors: find_successors(nextState)
       }
     }
   }
   // for now, assume goal has been found so add it to open
-  open.push(current)
+  open.push(state_to_uniqueid(current.currentState))
+  openStates.push(current)
+  actionHistory.push(successor.actionID)
   /*
     Hint: In order to generate the solution path, you will need to augment
       the states to store the predecessor/parent state they were generated from
@@ -77,11 +93,19 @@ function breadth_first_search(initial_state) {
   
   var actionsToGoal = []
   var statesToGoal = []
-  for (var i = 0; i < open.length; i++) {
-    let node = open[i]
-    actionsToGoal.add(node.action)
-    statesToGoal.add(node.resultState)
+  for (var i = 0; i < actionHistory.length; i++) {
+    actionsToGoal.push(actionHistory[i])
   }
+  for (var i = 0; i < openStates.length; i++) {
+    let node = openStates[i]
+    statesToGoal.push(node.currentState)
+  }
+  if (actionsToGoal.length != statesToGoal.length) {
+    console.log("Actions To Goal: " + actionsToGoal.length)
+    console.log("States To Goal: " + statesToGoal.length)
+  }
+  console.log("Returning")
+  console.error("Returning")
   if (actionsToGoal.length == 0) {
     return null
   }
