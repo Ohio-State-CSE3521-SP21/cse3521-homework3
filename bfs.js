@@ -104,8 +104,6 @@ function breadth_first_search(initial_state) {
     console.log("Actions To Goal: " + actionsToGoal.length)
     console.log("States To Goal: " + statesToGoal.length)
   }
-  console.log("Returning")
-  console.error("Returning")
   if (actionsToGoal.length == 0) {
     return null
   }
