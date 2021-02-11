@@ -12,6 +12,52 @@ function astar_search(initial_state) {
 
   /***Your code for A* search here***/
   
+  var currentNode = {
+    currentState: initial_state,
+    children: find_successors(initial_state)
+  }
+
+  var currentNodeHistory = []
+
+  var totalCost = 0
+  while (!is_goal_state(currentNode.currentState)) {
+    // add current node to the closed set
+    closed.add(state_to_uniqueid(currentNode.currentState))
+    // reset Priority Queue
+    while (!open.isEmpty()) {
+      open.poll()
+    }
+    // evaluate children
+    let children = currentNode.children
+    // iterate through children
+    for (var i = 0; i < children.length; i++) {
+      // make sure the child was not visited earlier
+      if (!closed.has(state_to_uniqueid(children[i].resultState))) {
+        open.add({
+          estimated_total_cost: totalCost + calculate_heuristic(children[i].resultState),
+          index: i
+        })
+      }
+    }
+    // Get the smallest child
+    let cheapestChild = open.poll()
+    // add next node to the history
+    currentNodeHistory.push({
+      action: currentNode.children[cheapestChild.index].actionID,
+      state: currentNode.children[cheapestChild.index].resultState
+    })
+    // Update current node to be the cheapest child
+    let currentNodeCopy = Object.assign({}, currentNode)
+    let nextState = currentNodeCopy.children[cheapestChild.index].resultState
+    let nextChildren = find_successors(currentNodeCopy.children[cheapestChild.index].resultState)
+    currentNode = {
+      currentState: nextState,
+      children: nextChildren
+    }
+    // going to the next level in tree so increase the total cost
+    totalCost += fixed_step_cost
+  }
+  
   /*
     Hint: A* is very similar to BFS, you should only need to make a few small modifications to your BFS code.
 	
@@ -22,7 +68,15 @@ function astar_search(initial_state) {
 	
     See (included) FastPriorityQueue.js for priority queue usage example.
   */
-
-  //No solution found
-  return null;
+  var actionsToGoal = []
+  var statesToGoal = []
+  for (var i = 0; i < currentNodeHistory.length; i++) {
+    let node = currentNodeHistory[i]
+    actionsToGoal.push(node.action)
+    statesToGoal.push(node.state)
+  }
+  return {
+    actions : actionsToGoal,
+    states : statesToGoal
+  }
 }
