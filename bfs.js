@@ -12,62 +12,55 @@ function breadth_first_search(initial_state) {
 
   /***Your code for breadth-first search here***/
 
-  let openStates = []
-  let closedStates = new Set()
-  let actionHistory = []
-  var current = {
-    parent: null,
+  // save trail
+  var nodeHistory = []
+  var actionHistory = []
+
+  let currentNode = {
     currentState: initial_state,
-    successors: find_successors(initial_state) // contains actionID, next state
+    children: find_successors(initial_state)
   }
 
-  var successor = null
-  var nextState = null
-  while (!is_goal_state(current.currentState)) {
-    console.log(open.toString)
-    successor = null
-    nextState = null
-    var i = 0
-    for (i = 0; i < current.successors.length; i++) {
-      successor = current.successors[i]
-      nextState = successor.resultState
-      if (!closed.has(state_to_uniqueid(nextState)) && !open.includes(state_to_uniqueid(nextState))) {
+  while (!is_goal_state(currentNode.currentState)) {
+    // add it to open
+    open.push(state_to_uniqueid(currentNode.currentState))
+
+    var moveToNext = false // boolean used to terminate for loop
+    // iterate through children
+    for (var i = 0; i < currentNode.children.length && !moveToNext; i++) {
+      // find first child that is not visited yet
+      if (!closed.has(state_to_uniqueid(currentNode.children[i].resultState)) && !open.includes(state_to_uniqueid(currentNode.children[i].resultState))) {
+        
+        // child not visited yet
+        let nextNode = Object.assign({}, currentNode) // copy current node
+        // save action ID
+        actionHistory.push(currentNode.children[i].actionID)
+        currentNode = {
+          currentState: nextNode.children[i].resultState,
+          children: find_successors(nextNode.children[i].resultState)
+        }
+        nodeHistory.push(currentNode)
+        moveToNext = true
         break
       }
     }
-    // if successor == null, no children and not a goal
-    if (successor == null) {
-      // add this node to the closed set and go up
-      closed.add(state_to_uniqueid(current.currentState))
-      closedStates.add(current)
-      current = openStates.pop()
-      actionHistory.pop()
+    if (moveToNext) {
       continue
     }
-    // if i == current.successors.length, all children are in closed
-    if (i == current.successors.length) {
-      // all children are visited so add current node to closed and go up
-      closed.add(state_to_uniqueid(current.currentState))
-      closedStates.add(current)
-      current = openStates.pop()
-      actionHistory.pop()
-    } else {
-      // we still have some nodes to visit
-      // next state to go into
-      open.push(state_to_uniqueid(current.currentState))
-      openStates.push(current)
-      actionHistory.push(successor.actionID)
-      current = {
-        parent: current.currentState,
-        currentState: nextState,
-        successors: find_successors(nextState)
-      }
+    // at this point, no available child was selected
+    // add current node to closed and go up
+    let id = state_to_uniqueid(currentNode.currentState)
+    closed.add(state_to_uniqueid(currentNode.currentState))
+    open.pop()
+    actionHistory.pop()
+    let prevNode = nodeHistory.pop()
+    currentNode = {
+      currentState: prevNode.currentState,
+      children: find_successors(prevNode.currentState)
     }
   }
-  // for now, assume goal has been found so add it to open
-  open.push(state_to_uniqueid(current.currentState))
-  openStates.push(current)
-  actionHistory.push(successor.actionID)
+  nodeHistory.push(currentNode)
+
   /*
     Hint: In order to generate the solution path, you will need to augment
       the states to store the predecessor/parent state they were generated from
@@ -93,17 +86,16 @@ function breadth_first_search(initial_state) {
   
   var actionsToGoal = []
   var statesToGoal = []
+  
+  for (var i = 0; i < nodeHistory.length; i++) {
+    let state = nodeHistory[i].currentState
+    statesToGoal.push(state)
+  }
   for (var i = 0; i < actionHistory.length; i++) {
-    actionsToGoal.push(actionHistory[i])
+    let actionID = actionHistory[i]
+    actionsToGoal.push(actionID)
   }
-  for (var i = 0; i < openStates.length; i++) {
-    let node = openStates[i]
-    statesToGoal.push(node.currentState)
-  }
-  if (actionsToGoal.length != statesToGoal.length) {
-    console.log("Actions To Goal: " + actionsToGoal.length)
-    console.log("States To Goal: " + statesToGoal.length)
-  }
+
   if (actionsToGoal.length == 0) {
     return null
   }
