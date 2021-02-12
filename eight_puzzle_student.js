@@ -33,6 +33,10 @@ ID | Action
 //////////////////////////////////////////////////////////////////////////////
 // Complete the following two functions
 
+/**
+ * AUTHORS: John Choi and Austin Schall 
+ */
+
 //Check if the given state is a goal state
 //Returns: true if is goal state, false otherwise
 function is_goal_state(state) {

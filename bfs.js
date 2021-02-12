@@ -5,12 +5,15 @@
 //  actions: Sequence(Array) of action ids required to reach the goal state from the initial state
 //  states: Sequence(Array) of states that are moved through, ending with the reached goal state (and EXCLUDING the initial state)
 //  The actions and states arrays should both have the same length.
+
+/**
+ * AUTHORS: John Choi and Austin Schall 
+ */
+
 function breadth_first_search(initial_state) {
   let open = []; //See push()/pop() and unshift()/shift() to operate like stack or queue
                  //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
   let closed = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
-
-  /***Your code for breadth-first search here***/
 
   // save trail
   var nodeHistory = []
