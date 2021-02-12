@@ -7,7 +7,7 @@
 //  The actions and states arrays should both have the same length.
 function iterative_deepening_search(initial_state) {
   
-  let d = 0;
+  var d = 0;
   while(true){
     let temp = depth_limited_search(initial_state, d);
     if (temp != null){
