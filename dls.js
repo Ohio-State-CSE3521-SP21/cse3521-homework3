@@ -7,9 +7,6 @@
 //  states: Sequence(Array) of states that are moved through, ending with the reached goal state (and EXCLUDING the initial state)
 //  The actions and states arrays should both have the same length.
 function depth_limited_search(initial_state,depth_limit) {
-
-  /***Your code for depth-limited search here!***/
-  
   let current_state = {
     state : initial_state,
     predecessor : null,
