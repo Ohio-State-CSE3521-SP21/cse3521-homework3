@@ -17,7 +17,6 @@ function depth_limited_search(initial_state,depth_limit) {
 }
 
 function dls(current_state, depth){
-
   /* If the current state is in the goal state, return them */
   if(is_goal_state(current_state.state)){
     let states = [];
